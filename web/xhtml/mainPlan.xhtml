@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/layout.xhtml">
+        <ui:define name="top">
+            #{bundle.Plan}
+        </ui:define>
+        <ui:define id="mainPlanContent" name="content">
+            <f:event type="preRenderView" listener="#{planBean.init}"/>
+            <h:form id="mainPlanForm">
+                
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Select DC:" rendered="false"/>
+                    <p:selectOneMenu id="dcList" 
+                                     value="#{planBean.orgUnit.ouCode}"
+                                     rendered="false">
+                        <f:selectItems value="#{planBean.orgUnitList}"
+                                       var="dc"
+                                       itemLabel="#{dc.ouCode}"
+                                       itemValue="#{dc.ouName}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Select PT:" rendered="true"/>
+                    <p:selectOneMenu id="ptList" 
+                                     value="#{planBean.orgUnit.ouCode}"
+                                     rendered="true">
+                        <f:selectItems value="#{planBean.orgUnitList}"
+                                       var="pt"
+                                       itemLabel="#{pt.ouCode}"
+                                       itemValue="#{pt.ouCode}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Date Encoded:"/>
+                    <p:calendar id="planEncoded"
+                                value="#{planBean.report.reportDateEncoded}"
+                                required="true"
+                                navigator="true"
+                                mode="popup"
+                                pattern="MMM dd yyyy"
+                                yearRange="c-1:c+5"
+                                size="10">
+                        <f:convertDateTime pattern="MMM dd yyyy"/>
+                    </p:calendar>
+                    <h:outputLabel value="Plan from:"/>
+                    <h:panelGrid columns="3">
+                        <p:calendar id="planFrom"
+                                    value="#{planBean.report.reportDateFrom}"
+                                    required="true"
+                                    navigator="true"
+                                    mode="popup"
+                                    pattern="MMM dd yyyy"
+                                    yearRange="c-1:c+5"
+                                    size="10">
+                            <f:convertDateTime pattern="MMM dd yyyy"/>
+                        </p:calendar>
+                        <h:outputLabel value="-"/>
+                        <p:calendar id="planTo"
+                                    value="#{planBean.report.reportDateTo}"
+                                    required="true"
+                                    navigator="true"
+                                    mode="popup"
+                                    pattern="MMM dd yyyy"
+                                    yearRange="c-1:c+5"
+                                    size="10">
+                            <f:convertDateTime pattern="MMM dd yyyy"/>
+                        </p:calendar>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <br/>
+                <h:outputLabel value="Enter narrative of the plan:"/>
+                <br/>
+                <p:inputTextarea cols="50" rows="10" value="#{planBean.report.reportDtl}">
+                </p:inputTextarea>
+                <br/>
+                <h:commandButton value="CANCEL" action="#{planBean.beanclear}"/>
+                <h:commandButton value="SAVE" action="#{planBean.savePlan}"/>
+                <h:commandButton value="VIEW" action="/xhtml/viewPlan.xhtml"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
